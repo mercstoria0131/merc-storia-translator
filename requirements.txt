@@ -1,0 +1,6 @@
+UnityPy>=1.25
+pycryptodome
+Pillow
+numpy
+soundfile
+anthropic>=2.4

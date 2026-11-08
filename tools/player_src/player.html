@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>梅露可物語 故事播放</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&family=RocknRoll+One&family=Noto+Serif+TC:wght@700&family=Yuji+Boku&display=swap">
+<link rel="stylesheet" href="player/player.css">
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <div id="shake">
+      <div id="bg"><img id="bgA" alt=""><img id="bgB" alt=""></div>
+      <div id="chars">
+        <div class="slot" data-slot="left"></div>
+        <div class="slot" data-slot="center"></div>
+        <div class="slot" data-slot="right"></div>
+      </div>
+      <div id="weather"></div>
+      <canvas id="ssfx" width="1136" height="640"></canvas>
+    </div>
+    <canvas id="tl" width="1136" height="640"></canvas>
+    <div id="tltext"></div>
+    <button id="tlskip" aria-label="略過演出">SKIP ▶▶</button>
+    <div id="ui">
+      <div id="nameplate"><span></span></div>
+      <div id="window">
+        <img class="wbg default" src="assets/ui/bg_message_fs.png" alt="">
+        <img class="wbg shout" src="assets/ui/bg_shout_fs.png" alt="">
+        <div id="text"></div>
+        <button id="btnBack" class="wbtn" aria-label="BACK"></button>
+        <button id="btnNext" class="wbtn" aria-label="NEXT"></button>
+        <img id="nextIcon" src="assets/ui/icon-next_story.png" alt="">
+      </div>
+      <div id="menu">
+        <button id="btnMenu" class="mbtn" aria-label="MENU"></button>
+        <button id="btnSkip" class="sbtn" aria-label="スキップ"></button>
+        <button id="btnLog" class="sbtn" aria-label="ログ"></button>
+        <button id="btnAuto" class="sbtn" aria-label="オート"></button>
+        <button id="btnHide" class="sbtn" aria-label="UI表示"></button>
+        <button id="btnLang" class="tbtn" title="切換 中文／日文原文">中</button>
+      </div>
+      <div id="autoInd"><img src="assets/ui/autoplay_arrow.png" alt=""><img src="assets/ui/autoplay_txt.png" alt=""><i></i><i></i><i></i></div>
+    </div>
+    <div id="fade"></div>
+    <canvas id="healfx" width="1136" height="640"></canvas>
+    <div id="wipe"><div></div><div></div><div></div><div></div></div>
+    <video id="movie" playsinline></video>
+    <div id="mskip"><div class="panel"><div class="msg"></div><div class="row"><a class="ebtn no">いいえ／取消</a><a class="ebtn yes">はい／略過</a></div></div></div>
+    <div id="title" class="loading"><div class="chap"></div><div class="ep"></div><div class="ring"><svg viewBox="0 0 100 100"><circle class="bgc" cx="50" cy="50" r="44"></circle><circle class="fgc" cx="50" cy="50" r="44"></circle></svg><span class="pct">讀取中</span></div><div class="tap">點擊開始</div></div>
+    <div id="log"><div class="panel"><div class="list"></div><button class="close" aria-label="CLOSE"></button></div></div>
+    <div id="end"><div class="panel"><div class="msg">本話結束</div><div id="endNote" class="note"></div><a id="endNext" class="ebtn">下一話</a><a id="endList" class="ebtn" href="index.html">返回目錄</a></div></div>
+  </div>
+</div>
+<script src="data/layout.js"></script>
+<script src="data/catalog.js"></script>
+<script src="player/timeline.js"></script>
+<script src="player/spritestudio.js"></script>
+<script src="player/player.js"></script>
+</body>
+</html>

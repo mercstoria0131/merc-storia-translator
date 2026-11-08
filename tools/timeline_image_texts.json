@@ -1,0 +1,19 @@
+{
+  "_說明": "Timeline 演出裡「畫成圖片」的日文台詞（精靈圖名稱 → 圖上的文字，依圖片人工抄錄）。翻譯後播放器會用 Canvas 把譯文畫成同樣風格的貼圖取代原圖。style：outline＝白字深色描邊；mind＝米黃字、字距寬、深色描邊；glow＝橘色光暈（模糊的發光層）。",
+  "decemberspecial_2": {
+    "txt_001": {"text": "俺の痛みはもう。", "style": "outline"},
+    "txt_002": {"text": "これまでの旅路が、彼らと重ねた日々が。", "style": "outline"},
+    "txt_003": {"text": "癒してくれていたんだ。", "style": "outline"},
+    "txt_004": {"text": "……だから。", "style": "outline"},
+    "txt_005": {"text": "今度は俺が癒したい、この世界を。", "style": "outline"},
+    "txt_006": {"text": "俺が癒してもらったように。", "style": "outline"},
+    "txt_007": {"text": "ありがとう、メルク。", "style": "outline"},
+    "txt_008": {"text": "俺の元に、心を届けてくれて。", "style": "outline"},
+    "txt_009": {"text": "俺の胸に、心を届けてくれて。", "style": "outline"},
+    "txt_010": {"text": "世界を、届けてくれて！", "style": "outline"}
+  },
+  "main2_sizuku": {
+    "txt_mind": {"text": "心の鐘を鳴らす", "style": "mind"},
+    "txt1_mind": {"text": "心の鐘を鳴らす", "style": "glow"}
+  }
+}

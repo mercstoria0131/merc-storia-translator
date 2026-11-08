@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>梅露可物語 故事</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Huninn&family=RocknRoll+One&display=swap">
+<style>
+  :root { --wood: #5a3b22; --wood2: #7a5232; --paper: #fbf4dc; --ink: #46382f; --gold: #c9a46a; --leaf: #8fa83a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; min-height: 100vh; font-family: "Huninn", "RocknRoll One", "PingFang TC", sans-serif; color: var(--ink);
+    background: #2b1c10 url(assets/ui/bg_message_fs.png) center bottom / 1136px 218px no-repeat fixed; }
+  header { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: linear-gradient(var(--wood2), var(--wood)); color: #fff3d6; border-bottom: 3px solid var(--gold); box-shadow: 0 2px 8px rgba(0,0,0,.4); }
+  header h1 { margin: 0; font-size: 22px; letter-spacing: 2px; flex: 1; }
+  header button { font: inherit; color: #fff3d6; background: rgba(0,0,0,.25); border: 1px solid var(--gold); border-radius: 14px; padding: 4px 12px; cursor: pointer; }
+  main { max-width: 980px; margin: 0 auto; padding: 16px 16px 240px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
+  .tabs button { font: inherit; padding: 6px 14px; border-radius: 16px; border: 2px solid var(--gold); background: var(--paper); color: var(--ink); cursor: pointer; }
+  .tabs button.on { background: linear-gradient(#b8c95a, #7b8f2a); color: #fff; border-color: #5f6e1e; }
+  details { margin: 10px 0; background: var(--paper); border: 3px solid var(--wood2); border-radius: 12px; box-shadow: 0 2px 0 var(--wood); overflow: hidden; }
+  summary { cursor: pointer; padding: 12px 16px; font-size: 19px; background: linear-gradient(#fff9e6, #f1e2b8); list-style: none; display: flex; justify-content: space-between; gap: 8px; }
+  summary small { color: #8a7560; font-size: 14px; }
+  .ep { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-top: 1px dashed #d9c79c; text-decoration: none; color: var(--ink); }
+  .ep:hover { background: #fff7d6; }
+  .ep .no { flex: none; width: 72px; font-size: 14px; color: #fff; background: var(--leaf); border-radius: 10px; text-align: center; padding: 2px 0; }
+  .ep .t { flex: 1; font-size: 17px; }
+  .ep .t small { display: block; font-size: 13px; color: #9a8670; }
+  .badge { font-size: 12px; padding: 2px 8px; border-radius: 8px; background: #e0e0e0; color: #666; }
+  .badge.zh { background: #f6d27a; color: #5a3b22; }
+  dialog { border: 3px solid var(--gold); border-radius: 14px; background: var(--paper); color: var(--ink); font: inherit; }
+  dialog label { display: block; margin: 10px 0; }
+  dialog input[type=text] { font: inherit; padding: 4px 8px; width: 12em; }
+  .empty { text-align: center; color: #fff3d6; padding: 60px 0; }
+</style>
+</head>
+<body>
+<header><h1>ストーリー｜故事</h1><button id="setBtn">設定</button></header>
+<main>
+  <div class="tabs" id="tabs"></div>
+  <div id="list"></div>
+</main>
+<dialog id="dlg">
+  <form method="dialog">
+    <label>主角名稱（取代 &lt;name&gt;）<br><input type="text" id="pname" placeholder="優"></label>
+    <label>BGM 音量 <input type="range" id="bgmv" min="0" max="1" step="0.05"></label>
+    <label>音效音量 <input type="range" id="sev" min="0" max="1" step="0.05"></label>
+    <label>文字速度 <input type="range" id="tspd" min="0" max="80" step="4"> <small>（越左越快，0＝立即顯示）</small></label>
+    <button>關閉</button>
+  </form>
+</dialog>
+<script src="data/catalog.js"></script>
+<script>
+(function () {
+  const cat = window.MERC_CATALOG || [];
+  const st = { get(k, d) { try { const v = localStorage.getItem("merc_" + k); return v === null ? d : v; } catch (e) { return d; } }, set(k, v) { try { localStorage.setItem("merc_" + k, v); } catch (e) {} } };
+  const ORDER = ["メインストーリー 第二部", "メインストーリー 第一部", "メインストーリー 第一部オリジン", "イベントストーリー", "その他"];
+  const parts = [...new Set(cat.map((c) => c.part))].sort((a, b) => ORDER.indexOf(a) - ORDER.indexOf(b));
+  const partZh = { "メインストーリー 第二部": "主線故事 第二部", "メインストーリー 第一部": "主線故事 第一部", "メインストーリー 第一部オリジン": "主線故事 第一部 起源", "イベントストーリー": "活動故事", "その他": "其他" };
+  let cur = st.get("part", parts[0]);
+  if (!parts.includes(cur)) cur = parts[0];
+  const tabs = document.getElementById("tabs"), list = document.getElementById("list");
+  function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+  function render() {
+    tabs.innerHTML = parts.map((p) => '<button data-p="' + esc(p) + '" class="' + (p === cur ? "on" : "") + '">' + esc(partZh[p] || p) + "</button>").join("");
+    const cs = cat.filter((c) => c.part === cur);
+    if (!cs.length) { list.innerHTML = '<div class="empty">尚未匯出任何故事。請先用翻譯器匯出章節。</div>'; return; }
+    list.innerHTML = cs.map((c) => {
+      const done = c.stories.filter((s) => s.title_zh).length;
+      return '<details' + (cs.length === 1 ? " open" : "") + '><summary><span' + (c.name_zh ? ' title="' + esc(c.name) + '"' : "") + '>' + esc(c.name_zh || c.name) + '</span><small>已翻譯 ' + done + " / " + c.stories.length + "</small></summary>" +
+        c.stories.map((s) => '<a class="ep" href="player.html?id=' + s.id + '"><span class="no">' + esc(s.sub) + '</span><span class="t">' + esc(s.title_zh || s.title) + (s.title_zh ? "<small>" + esc(s.title) + "</small>" : "") + '</span><span class="badge ' + (s.title_zh ? "zh" : "") + '">' + (s.title_zh ? "中文" : "日文") + "</span></a>").join("") + "</details>";
+    }).join("");
+  }
+  tabs.addEventListener("click", (e) => { const b = e.target.closest("button"); if (!b) return; cur = b.dataset.p; st.set("part", cur); render(); });
+  render();
+  const dlg = document.getElementById("dlg");
+  document.getElementById("setBtn").onclick = () => {
+    pname.value = st.get("player_name", ""); bgmv.value = st.get("bgm_vol", "0.6"); sev.value = st.get("se_vol", "0.8"); tspd.value = st.get("text_speed", "28");
+    dlg.showModal();
+  };
+  dlg.addEventListener("close", () => { if (pname.value.trim()) st.set("player_name", pname.value.trim()); st.set("bgm_vol", bgmv.value); st.set("se_vol", sev.value); st.set("text_speed", tspd.value); });
+})();
+</script>
+</body>
+</html>

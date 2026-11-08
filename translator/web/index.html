@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>梅露可物語 故事翻譯器</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><span class="logo">✦</span> 梅露可物語 離線版　故事翻譯器</div>
+  <div id="keyPill" class="pill">翻譯引擎：檢查中…</div>
+</header>
+<div id="app">
+  <aside>
+    <div class="parts" id="parts"></div>
+    <div class="selbar"><label><input type="checkbox" id="selAll"> 全選本部</label><span id="selCount">已選 0 話</span></div>
+    <div id="tree"></div>
+  </aside>
+  <main>
+    <section class="toolbar">
+      <div class="est" id="est">請在左側勾選要翻譯的章節或話數。</div>
+      <div class="actions">
+        <button id="bGloss" class="btn">① 建立名詞表</button>
+        <button id="bTrans" class="btn primary">② 開始翻譯</button>
+        <button id="bExport" class="btn">③ 更新播放資料</button>
+        <a id="bPlay" class="btn" href="/output/index.html" target="_blank" rel="noopener">開啟播放器 ↗</a>
+      </div>
+      <div class="opts">
+        <label><input type="checkbox" id="optForce"> 重新翻譯已完成的話</label>
+        <label><input type="checkbox" id="optExport" checked> 翻譯完成後自動更新播放資料</label>
+      </div>
+    </section>
+    <nav class="tabs">
+      <button data-tab="jobs" class="on">工作進度</button>
+      <button data-tab="gloss">名詞對照表</button>
+      <button data-tab="review">譯文校對</button>
+      <button data-tab="settings">設定</button>
+    </nav>
+    <section class="tab on" id="tab-jobs">
+      <div id="jobs"><p class="muted">尚無工作。流程：① 建立名詞表（可在「名詞對照表」分頁修改譯名）→ ② 開始翻譯 → 開啟播放器（劇本資料在第一次開啟該話時自動建立；背景、立繪、聲音、影片播放時才從遊戲檔解碼，不佔硬碟）。</p></div>
+    </section>
+    <section class="tab" id="tab-gloss">
+      <div class="gbar">
+        <input id="gSearch" type="search" placeholder="搜尋原文或譯名…">
+        <select id="gType"><option value="">全部類型</option></select>
+        <select id="gRun" title="依新增批次篩選；同一次「建立名詞表」或「翻譯」新增的名詞為同一批"><option value="">全部（最近一批置頂）</option></select>
+        <button id="gAdd" class="btn small">＋ 新增</button>
+        <button id="gSave" class="btn small primary">儲存名詞表</button>
+        <span id="gInfo" class="muted"></span>
+      </div>
+      <div class="gwrap"><table id="gTable"><thead><tr><th>原文</th><th>譯名</th><th>類型</th><th>備註</th><th>來源</th><th>新增時間</th><th title="鎖定後翻譯與自動建表都不會更動">鎖定</th><th></th></tr></thead><tbody></tbody></table></div>
+    </section>
+    <section class="tab" id="tab-review">
+      <div class="rbar">
+        <select id="rStory"></select>
+        <input id="rTitle" placeholder="中文標題">
+        <label><input type="checkbox" id="rWarnOnly"> 只看警告</label>
+        <button id="rSave" class="btn small primary">儲存修改</button>
+        <span id="rInfo" class="muted"></span>
+      </div>
+      <div id="rList"></div>
+    </section>
+    <section class="tab" id="tab-settings">
+      <form id="setForm" class="settings">
+        <fieldset class="eng">
+          <legend>翻譯引擎</legend>
+          <div class="provs" id="sProv"></div>
+          <div class="psec" data-p="anthropic">
+            <label>Anthropic API 金鑰 <input type="password" id="sKey" placeholder="sk-ant-…（留空則沿用目前設定或 ANTHROPIC_API_KEY 環境變數）" autocomplete="off"></label>
+            <label>Claude 模型 <select id="sModel"></select></label>
+            <label>思考深度（effort） <select id="sEffort"><option value="low">low（快、省）</option><option value="medium">medium（預設）</option><option value="high">high（更細緻）</option></select></label>
+          </div>
+          <div class="psec" data-p="ollama">
+            <label>Ollama 服務網址 <input type="text" id="oUrl" placeholder="http://192.168.1.20:11434"></label>
+            <label>存取金鑰（選填：Ollama 放在需要 Bearer 驗證的反向代理後面時才需要） <input type="password" id="oKey" autocomplete="off"></label>
+            <div class="mrow"><label>模型 <select id="oModel"><option value="">（請先取得模型清單）</option></select></label><button type="button" class="btn small" data-list="ollama">取得模型清單／測試連線</button></div>
+            <label>或手動輸入模型名稱 <input type="text" id="oManual" placeholder="例：qwen3:32b"></label>
+            <label>上下文長度 num_ctx <input type="number" id="oCtx" min="2048" step="1024"></label>
+            <label>思考模式（Qwen3、gpt-oss 等推理模型） <select id="oThink"><option value="off">關閉（預設，速度約快 2～3 倍）</option><option value="on">開啟（較慢，難句可能較準）</option><option value="auto">依模型預設</option></select></label>
+          </div>
+          <div class="psec" data-p="vllm">
+            <label>vLLM 服務網址（OpenAI 相容 API） <input type="text" id="vUrl" placeholder="http://192.168.1.20:8000"></label>
+            <label>API 金鑰（選填：vLLM 啟動時有加 --api-key 才需要） <input type="password" id="vKey" autocomplete="off"></label>
+            <div class="mrow"><label>模型 <select id="vModel"><option value="">（請先取得模型清單）</option></select></label><button type="button" class="btn small" data-list="vllm">取得模型清單／測試連線</button></div>
+            <label>或手動輸入模型名稱 <input type="text" id="vManual" placeholder="例：Qwen/Qwen3-32B"></label>
+          </div>
+          <div id="connInfo" class="muted"></div>
+          <div class="psec local" data-p="local">
+            <label>溫度 temperature <input type="number" id="sTemp" min="0" max="1.5" step="0.05"></label>
+          </div>
+          <label>每批句數（0＝自動：Claude 60 句、自架模型 30 句；模型較小或常被截斷時調低） <input type="number" id="sBatch" min="0" max="120"></label>
+        </fieldset>
+        <p class="muted">所有金鑰只存在本機 ~/.config/merc-story-translator/credentials.json（權限 600），不會寫進 SD 卡或輸出檔。</p>
+        <label>同時翻譯的話數 <input type="number" id="sWorkers" min="1" max="8"></label>
+        <label>遊戲資料夾（Steam 版安裝目錄） <input type="text" id="sGame"></label>
+        <label>參考資料（每行一個網址或一段文字；用於建立名詞表，例如角色維基頁面）<textarea id="sRefs" rows="5" placeholder="https://wikiwiki.jp/mehterhanedb/…"></textarea></label>
+        <label>追加翻譯規則（例如角色口癖的固定譯法）<textarea id="sRules" rows="5" placeholder="例：梅露可句尾的「～なのですよ」一律譯為「～的說喔」"></textarea></label>
+        <button class="btn primary" type="submit">儲存設定</button>
+        <span id="sInfo" class="muted"></span>
+      </form>
+    </section>
+  </main>
+</div>
+<script src="app.js"></script>
+</body>
+</html>

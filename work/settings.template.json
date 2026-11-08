@@ -1,0 +1,18 @@
+{
+ "provider": "anthropic",
+ "model": "claude-opus-5-5",
+ "effort": "medium",
+ "workers": 3,
+ "game_dir": "",
+ "extra_rules": "梅露可的口癖「みゅ」，一律翻譯成「呀」\n圖圖的叫聲「きゅ」、「きゅー」或「きゅう」等等類似的字，一律翻譯成「啾」",
+ "refs": "",
+ "ollama_url": "http://192.168.1.1:11434",
+ "ollama_model": "",
+ "vllm_url": "http://192.168.1.1:8000",
+ "vllm_model": "",
+ "num_ctx": 16384,
+ "temperature": 0.3,
+ "batch_lines": 0,
+ "ollama_think": "off",
+ "media_cache_mb": 512
+}

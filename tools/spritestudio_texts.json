@@ -1,0 +1,604 @@
+{
+  "_說明": "SpriteStudio 特效裡「畫成圖片」的日文台詞（特效名稱 → cell → 圖上的文字，依貼圖人工抄錄；換行＝圖上的換行，行數必須和圖上一致）。列在這裡的特效會由播放器用 Canvas 重現，翻譯後用譯文取代圖上的字。cell 名稱：特效只有一個 CellMap 時是 cell 名稱，否則是「CellMap 名稱/cell 名稱」。選項：color 原圖文字顏色（省略＝自動取樣）；rot 90＝cell 在貼圖裡順時針轉 90° 存放；wrap \"cell\"＝譯文可以用到整個 cell 的寬度；lines 手動指定每一行的範圍 [x0, x1, y0, y1]（轉正後的 cell 座標）；keep＝保留原圖，只清掉 clear 列出的範圍（省略時清掉每一行）再寫字；spread＝字平均分散在整行；blur＝只畫模糊的光暈；font／weight 字型；特效層級的 _anims 只重現列出的動畫（其他動畫沒有字，維持 CSS 近似）。 沒有台詞但要用 Canvas 重現原圖的特效（例如虛構符文）列成空物件 {}。",
+  "Storyparts_lspr": {
+    "L1": {
+      "text": "逃げたい",
+      "color": "#ffffff"
+    },
+    "L2": {
+      "text": "帰りたくない\nあの絶望の世界へ",
+      "color": "#ffffff"
+    },
+    "L3": {
+      "text": "絶望で巡り　絶望が支配する\n人は傷つけ合い　理解し合えない",
+      "color": "#ffffff"
+    },
+    "L4": {
+      "text": "それならばいっそ\nここではないどこかへ",
+      "color": "#ffffff"
+    },
+    "L5": {
+      "text": "ここではない\nどこかでなら",
+      "color": "#ffffff"
+    },
+    "L6": {
+      "text": "絶望の化身となり果てた私にも\n心癒される時が来るだろうか",
+      "color": "#ffffff"
+    },
+    "L7": {
+      "text": "最近町では　こんなうわさが流行ってるんだ",
+      "color": "#ffffff"
+    },
+    "L8": {
+      "text": "人間でも　モンスターでもない\n別の世界から訪れた　不思議なモノが\nこの機械の国を巡ってるって噂",
+      "color": "#ffffff"
+    },
+    "L9": {
+      "text": "その姿はお伽噺のドラゴンにも\n決して消えない炎にも似ているっていう\nなぜソレがこの世界に留まっているのか　誰も知らない",
+      "color": "#ffffff"
+    },
+    "L10": {
+      "text": "でも\nそれはこの世界を",
+      "color": "#ffffff"
+    },
+    "L11": {
+      "text": "嬉しそうに　楽しそうに\n満ち足りたように　見つめているんだって",
+      "color": "#ffffff"
+    },
+    "M1": {
+      "text": "キッドさんとジャンナさんは\n最近はもっぱら　その噂を追うのに忙しいらしい\nヴィントスがそう言ってた",
+      "color": "#47382e"
+    },
+    "M2": {
+      "text": "僕には関係ないことだけど\nまぁ　色々助けてもらったから\nもう　どうでもいいとは言えないよね",
+      "color": "#47382e"
+    },
+    "M3": {
+      "text": "……ろろろろ！",
+      "color": "#47382e"
+    },
+    "M4": {
+      "text": "ああ　この子はウルールっていうんだ\n僕の家の同居人だよ\n結構仲良くやってる　優しいよ　僕なんかより",
+      "color": "#47382e"
+    },
+    "M5": {
+      "text": "姉さんが目を覚ましたら\n話したいことが　たくさんあるんだ",
+      "color": "#47382e"
+    },
+    "M6": {
+      "text": "僕たちの夢を　手助けしてくれた女の子の話\n僕が出会った　姉さんによく似た女の子の話\n僕たちの知らない世界から来た　女の子の話",
+      "color": "#47382e"
+    },
+    "M7": {
+      "text": "絶望で回る世界から来て\n僕たちに希望をくれた人の話だ",
+      "color": "#47382e"
+    }
+  },
+  "Storyparts_fairy_1": {
+    "base/1": {
+      "text": "わたしを見つけてくれたら、",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/2": {
+      "text": "町の秘密を教えてあげる。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/3": {
+      "text": "ただし、町が消えたことは",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/4": {
+      "text": "町の人たちには言わない事。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/5": {
+      "text": "消えたはずの町にたどり着いた。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/6": {
+      "text": "今は町はずれの寄宿学校に泊まらせてもらっている。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/7": {
+      "text": "フィーユという子について調査を進めてみる。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/8": {
+      "text": "寄宿学校からの手紙、ありがとう。\nフィーユを頑張って見つけてください。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/9": {
+      "text": "あなたは、メルクじゃないですね。\nいったい誰なんですか？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/10": {
+      "text": "簡単にばれてしまったわね。\nあなたのお友だちの名前を借りてごめんなさい。\nわたしのことはフィーユと呼んでくれるかしら。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/11": {
+      "text": "俺に手紙を送ってきたフィーユなのか？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/12": {
+      "text": "そう。\nあなたにやってもらいたいことがあって、\nあなたに手紙を送ったの。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/13": {
+      "text": "やってもらいたいことっていうのは、\n君を探すことじゃなかったのか。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/14": {
+      "text": "ごめんなさい。\nそれはあなたをこの寄宿学校へと導き、\nそして手がかりを得るためだったの。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/15": {
+      "text": "手がかり？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/16": {
+      "text": "この町をこぼした者を探すための手がかり。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base_/17": {
+      "text": "こぼしたっていうのは、どういう意味なんだ？\n外の世界では、\nこの町は消えてしまったと言われてる。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/18": {
+      "text": "それにその書き方は……、\n誰かがこの町をこぼしたってことなのか。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/19": {
+      "text": "そうよ。\nこの町は今、世界と世界のはざまにあるの。\n扉守の力を持つ者の仕業によって。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/20": {
+      "text": "この世界へ渡ってきたなら知っていると思うけど、\n扉守の一族は特別な魔法を使うことができる。\n２つの世界を行き来できる扉を創り出す術よ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/21": {
+      "text": "この町は、不完全なその術によって\n世界と世界の\n狭間へとこぼれ落ちてしまったの。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base__/22": {
+      "text": "わたしたちは\n扉守の力を持つ者を見つけなくちゃいけないわ。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base__/23": {
+      "text": "それが本当だとして……、\nどうしてこんな回りくどいやり方をしたんだ？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base__/24": {
+      "text": "それに、\n町の人たちに言ってはいけない理由も、\n俺をここに呼んだ理由もわからない。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base__/25": {
+      "text": "こんなやり方をしているのは\nなぜその妖精が力を使ったのか、\nわかっていないからなの。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base__/26": {
+      "text": "まだ誰も異変に気付いていない以上、\n騒ぎを起こして、その子を刺激したくないもの。\n彼女がどう動くか予想がつかないから。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base__/27": {
+      "text": "でも、それだとその子を探すのが大変だわ。\nだからあなたをこの町に呼んだの。\n町がはざまに落ちる寸前に、手紙を虫に託して。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_/28": {
+      "text": "もしその子が意図的に術を使ったのであれば、\n町がこぼれた後にこの町へ訪れたあなたに対して、\n必ずなにかの行動を起こすはず。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base__/29": {
+      "text": "あなたは何を知っていて、何者なのか。\n町は今も世界のはざまにあるままなのか。\nきっと確かめずにはいられないわ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base___/30": {
+      "text": "それってつまり……、\n君は寄宿学校にいる妖精たちの誰かが、\n扉守の力を持ってるって考えてるのか？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base___/31": {
+      "text": "ええ、そういうことよ。\nこの町で素性が隠されている妖精は\n寄宿学校の少女たちだけだもの。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/32": {
+      "text": "素性が隠されてる？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base___/33": {
+      "text": "ここの子たちは生まれを明かさず、\nなんでもない妖精として生活するの。\nそういう決まりとなっているそうよ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base__/34": {
+      "text": "だから、扉守の一族がいるとすれば\nここで暮らす少女たちの中にいるはずだわ。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base___/35": {
+      "text": "どうして俺は中に入れたんだ？\n君が俺を中に入れるようにしたんだと思ってた。\nなぜ俺だったのかもわからない。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base___/36": {
+      "text": "あなたを選んだのは、偶然に近いわ。\n世界を行き来したことのある人なら\n誰でもよかったの。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base___/37": {
+      "text": "その経験のある者だけが\n不完全な扉をくぐって\nこの町に入れる可能性があったから。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/38": {
+      "text": "あなたのことは、\nこの町にやってくる前に噂で知っていたわ。\n珍しい癒術士の旅人だって。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base___/39": {
+      "text": "それで次の行き先も聞いたことがあったから、\nあなたに手紙を送ることにしたのよ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/40": {
+      "text": "まさか春の女王の祝福を理由に\n寄宿学校に\n泊めてもらえるとは思っていなかったけれど。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/41": {
+      "text": "あなたって\nよほどその女王さまに気に入られているのね。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base___/42": {
+      "text": "……君の意図はわかった。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base___/43": {
+      "text": "俺には判断しづらいけど。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base___/44": {
+      "text": "それで……、\n手がかりは見つかったのか？",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base____/45": {
+      "text": "それはあなたの方が\nよく知ってるんじゃないかしら。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/46": {
+      "text": "もしかしてそれが……、\n扉守の一族を見つけることが、\n俺にやってほしいことなのか。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/47": {
+      "text": "ええ。\nわたしはある事情で動くことができないの。\nできるのは虫に手紙運びを頼むことだけ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/48": {
+      "text": "居場所を知らせることもできないわけか。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base____/49": {
+      "text": "ごめんなさい。\n郵便台の虫を使わないのもそれが理由なの。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/50": {
+      "text": "わたしの居場所を\nあの子たちに知られてしまうかもしれないから。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/51": {
+      "text": "あの子たちってエトラージュたちだよな。\n友だちだったって聞いたけど。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/52": {
+      "text": "そうね。\nでも、わたしをこの町に閉じ込めたのは\n彼女たちかもしれないわ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base____/53": {
+      "text": "どういうことだ？",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/54": {
+      "text": "今はもう、わたしよりもあなたの方が\n彼女たちに詳しいんじゃないかしら。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base___/55": {
+      "text": "君は本当に、月灯蝶なのか？",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base_____/56": {
+      "text": "わたしがそうだと言って、あなたは信じるかしら。\nそうでないと言って、あなたは信じるかしら。\nあなたが求める答えを選べばいいのよ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/57": {
+      "text": "ふふふ。\nあなたからの返信が遅いから\nきっと困らせてしまっているのね。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/58": {
+      "text": "それじゃあ、こうしましょう。\nこの町が狭間から抜け出すことができれば\nあなたにお礼を言いに行くわ、直接ね。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base_____/59": {
+      "text": "それから。",
+      "color": "#ffffff",
+      "wrap": "cell",
+      "rot": 90
+    },
+    "base_____/60": {
+      "text": "明日のお祭りにゆけば、\n月灯蝶について\nあなたの求める答えが見つかるかもしれないわ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "base/ten": {
+      "text": "……。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    }
+  },
+  "Storyparts_snowtext": {
+    "1": {
+      "text": "ぼくは嘘つきが嫌いだ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "2": {
+      "text": "———だから。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "3": {
+      "text": "ぼくはぼくが嫌いだ。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "4": {
+      "text": "嘘は好きじゃない。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "5": {
+      "text": "でも、嘘の中に本当があったり、",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "6": {
+      "text": "嘘が本当になったりするから、",
+      "color": "#ffffff",
+      "wrap": "cell"
+    },
+    "7": {
+      "text": "あたしは嘘つきが嫌いじゃない。",
+      "color": "#ffffff",
+      "wrap": "cell"
+    }
+  },
+  "Storyparts_vote1_oukoku_1": {
+    "base_/title": {
+      "text": "森羅に謎めく万象と\n虚実が継ぎ接ぐ\n感情世界",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700,
+      "lines": [
+        [
+          6,
+          338,
+          50,
+          100
+        ],
+        [
+          30,
+          332,
+          118,
+          168
+        ],
+        [
+          100,
+          282,
+          172,
+          222
+        ]
+      ],
+      "keep": true,
+      "clear": [
+        [
+          0,
+          30,
+          280,
+          100
+        ],
+        [
+          280,
+          50,
+          362,
+          120
+        ],
+        [
+          28,
+          100,
+          280,
+          120
+        ],
+        [
+          28,
+          112,
+          335,
+          175
+        ],
+        [
+          95,
+          170,
+          300,
+          232
+        ]
+      ]
+    },
+    "base_/title_sub_1": {
+      "text": "～ みずのかたち ～",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700
+    },
+    "base_/title_sub_2": {
+      "text": "～ よぞらのあめ ～",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700
+    },
+    "base_/title_sub_3": {
+      "text": "～ みえないぬし ～",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700
+    },
+    "base_/title_sub_4": {
+      "text": "～ つぎはぎのころも ～",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700
+    },
+    "base_/title_sub_5": {
+      "text": "～ こころのみなも ～",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700
+    },
+    "Storyparts_vote1_oukoku_1/battle_1": {
+      "text": "一回戦",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700,
+      "spread": true
+    },
+    "Storyparts_vote1_oukoku_1/battle_2": {
+      "text": "二回戦",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700,
+      "spread": true
+    },
+    "Storyparts_vote1_oukoku_1/battle_3": {
+      "text": "三回戦",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700,
+      "spread": true
+    },
+    "base_/text_tuduku": {
+      "text": "続",
+      "font": "\"Noto Serif TC\"",
+      "weight": 700,
+      "lines": [
+        [
+          68,
+          120,
+          38,
+          94
+        ]
+      ],
+      "keep": true,
+      "clear": [
+        [
+          58,
+          28,
+          130,
+          104
+        ]
+      ]
+    }
+  },
+  "Storyparts_decemberspecial_3": {
+    "txt_2[Storyparts_decemberspecial_3]": {
+      "text": "トトの心を癒す",
+      "color": "#ffffff",
+      "spread": true
+    },
+    "txt_2_light[Storyparts_decemberspecial_3]": {
+      "text": "トトの心を癒す",
+      "color": "#ffffff",
+      "spread": true,
+      "blur": 6
+    }
+  },
+  "Storyparts_wa_3_1": {
+    "_anims": [
+      "2"
+    ],
+    "Storyparts_wa_3_1/mozi_1": {
+      "text": "払",
+      "color": "#111111",
+      "font": "\"Yuji Boku\"",
+      "single": true
+    },
+    "base___/mozi_2": {
+      "text": "暁",
+      "color": "#111111",
+      "font": "\"Yuji Boku\"",
+      "single": true
+    },
+    "Storyparts_wa_3_1/mozi_3": {
+      "text": "蜘",
+      "color": "#111111",
+      "font": "\"Yuji Boku\"",
+      "single": true
+    },
+    "base___/mozi_4": {
+      "text": "蛛",
+      "color": "#111111",
+      "font": "\"Yuji Boku\"",
+      "single": true
+    }
+  },
+  "Storyparts_syousu_4_2": {},
+  "Storyparts_general_1": {},
+  "Storyparts_pappakapan_ss": {}
+}
