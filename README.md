@@ -7,7 +7,17 @@
 ## 需要準備
 
 - **Steam 版遊戲**已安裝在這台電腦（或可存取的磁碟上）。本工具只讀取遊戲檔，不修改。
-- **Python 3.10 以上**。第一次啟動會自動在 `~/.venvs/merc-story` 建立執行環境並安裝套件（UnityPy、Pillow、soundfile 等，約需幾分鐘與網路連線）。
+- **建議安裝 conda**（[Miniconda](https://www.anaconda.com/download/success) 或 [Miniforge](https://github.com/conda-forge/miniforge)）。第一次啟動時，啟動器會自動建立名為 `merc-story` 的 conda 環境（Python 3.12，套件來源 conda-forge），再安裝需要的套件（UnityPy、Pillow、soundfile 等，約需幾分鐘與網路連線）。
+  - 沒有 conda 時，改用已安裝的 Python 3.10 以上，在 `~/.venvs/merc-story` 建立 venv。
+  - 安裝中途失敗時，再次啟動會自動重新安裝。
+  - **Windows on ARM**（例如 Apple Silicon Mac 上的 Parallels）：解碼 BGM 與音效用的 FMOD 沒有 ARM64 版，因此啟動器會把 conda 環境建成 **x64 版**（由系統模擬執行），conda 本身是 ARM64 版也沒關係。沒有 conda 時，請安裝 python.org 的「Windows installer (64-bit)」版 Python；只有 ARM64 版 Python 時，仍可翻譯與看圖，但沒有聲音。
+- 想自己手動建立環境也可以（Windows on ARM 要先指定 x64：命令提示字元執行 `set CONDA_SUBDIR=win-64`，PowerShell 執行 `$env:CONDA_SUBDIR="win-64"`）：
+  ```
+  conda create -n merc-story -c conda-forge python=3.12 pip
+  conda activate merc-story
+  pip install -r requirements.txt
+  python translator/server.py
+  ```
 - 網頁瀏覽器（Chrome、Edge、Safari、Firefox）。
 
 ## 使用方式

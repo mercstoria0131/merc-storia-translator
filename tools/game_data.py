@@ -9,6 +9,7 @@ import json
 import os
 import threading
 
+import fmod_guard  # noqa: F401  必須在 UnityPy 之前（Windows ARM64 載不到 FMOD 時，圖片仍可解碼）
 import UnityPy
 
 import merc_format as mf

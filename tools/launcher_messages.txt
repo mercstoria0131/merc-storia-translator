@@ -1,0 +1,10 @@
+# 啟動翻譯器.bat 顯示的中文訊息（UTF-8）。cmd 執行含中文的批次檔時，跳轉後常把中文行切壞，
+# 所以批次檔本身只用 ASCII，訊息都放在這裡，格式為「代號=訊息」。
+CONDA_SETUP=建立 conda 環境「merc-story」（Python 3.12，需要網路，約幾分鐘）…
+VENV_SETUP=第一次執行：建立 Python 環境（需要 Python 3.10 以上）…
+DEPS=安裝需要的套件…
+USING=使用的 Python：
+NO_PY1=找不到 conda 或 Python 3.10 以上版本。建議安裝 Miniconda：https://www.anaconda.com/download/success
+NO_PY2=或從 https://www.python.org/ 安裝 Python（安裝時勾選 Add python.exe to PATH）。
+ARM_WARN=注意：目前是 ARM64 版 Python，BGM 與音效無法播放。建議安裝 Miniconda，啟動器會自動建立 x64 環境。
+FAIL=安裝失敗，請確認網路連線後再試一次。

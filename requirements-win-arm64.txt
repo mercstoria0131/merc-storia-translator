@@ -1,0 +1,16 @@
+# Windows ARM64 用：etcpak 沒有 ARM64 版本且本程式用不到（只用於重新壓縮貼圖），
+# 因此 UnityPy 以 --no-deps 安裝，其餘相依套件列在這裡（不含 etcpak）。
+# 注意：FMOD 沒有 ARM64 版，ARM64 版 Python 無法解碼 BGM 與音效；啟動器會優先使用 x64 版 Python。
+lz4
+brotli
+Pillow
+texture2ddecoder>=1.0.5
+astc-encoder-py>=0.1.12
+fmod_toolkit
+fsspec
+attrs
+tpk_ar
+pycryptodome
+numpy
+soundfile
+anthropic>=2.4
