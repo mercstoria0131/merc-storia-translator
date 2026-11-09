@@ -28,7 +28,7 @@ JA_DIR = os.path.join(ROOT, "data", "ja")
 ZH_DIR = os.path.join(ROOT, "work", "zh")
 GLOSSARY = os.path.join(ROOT, "work", "glossary.json")
 
-# 立繪圖集格位（由 GameAssembly.dll 內 CharacterActressConstant 反組譯得到）
+# 立繪圖集格位（各類立繪的身體框大小與表情格位置）
 ACTRESS_LAYOUT = {
     "Default": {"body": [2, 2, 700, 788], "face": 150, "slots": {}},
     "Navi": {"body": [2, 2, 400, 500], "face": 200, "slots": {}},

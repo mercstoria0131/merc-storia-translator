@@ -35,7 +35,7 @@
 - **點選某一話時**，伺服器會在背景把這一話用到的背景、立繪、BGM、音效先解碼到**記憶體**，播放時直接取用；影片在播放到時才解開。
 - 記憶體快取預設上限 512 MB，超過時自動丟掉最久沒用的素材（可在 `work/settings.json` 調整 `media_cache_mb`）。
 - 每一話的劇本資料（`data/ja/`、`output/data/`）在**第一次開啟該話時**才從遊戲檔建立，一話約幾十到幾百 KB；只有看過或翻譯過的話才會產生。
-- Timeline 演出、SpriteStudio 文字特效與播放器介面圖片已隨專案附上（`output/assets/timeline|ss|ui`，約 35 MB）。
+- 播放器介面圖片在第一次啟動時、Timeline 演出與 SpriteStudio 特效在第一次開啟用到它們的那一話時，從遊戲檔產生到 `output/assets/ui|timeline|ss`（全部約 70 MB，只會產生看過的部分）。本專案不附帶任何遊戲素材。
 
 因此播放時需要啟動翻譯器、而且能讀到遊戲檔。若想把播放器整包帶到沒有遊戲的地方離線看，可以另外用 `python tools/build_player.py --files <話數…>` 把素材匯出成檔案（會佔用較多空間）。
 
@@ -106,8 +106,8 @@ work/settings.template.json  設定樣板：第一次啟動時複製成 work/set
                        梅露可的口癖「みゅ」→「呀」、圖圖的叫聲「きゅ」等→「啾」）
 work/settings.json     你的設定（不納入版本控制；API 金鑰另存在 ~/.config/merc-story-translator/）
 data/                  從遊戲檔建立的日文劇本與章節資料（第一次用到時產生，不納入版本控制）
-output/                播放器：index.html、player.html、player/；assets/timeline|ss|ui 隨專案附上；
-                       data/ 為第一次開啟時產生的劇本資料
+output/                播放器：index.html、player.html、player/；assets/ui|timeline|ss 與 data/（劇本資料）
+                       都在使用時從遊戲檔產生（不納入版本控制）
 ```
 
 ## 已知限制
@@ -134,6 +134,6 @@ output/                播放器：index.html、player.html、player/；assets/t
 本專案的程式碼採用 [MIT 授權條款](LICENSE)。
 
 MIT 授權只適用於本專案作者撰寫的程式碼。從遊戲衍生的內容不在 MIT 授權範圍內，其權利仍屬原權利人，例如：
-- `output/assets/` 內附的演出與介面圖片；
+- 使用時從遊戲檔產生的演出與介面圖片（`output/assets/`）；
 - 劇本原文；
 - 譯文中引用的原作內容。

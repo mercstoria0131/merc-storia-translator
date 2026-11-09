@@ -23,6 +23,6 @@ SOFTWARE.
 -------------------------------------------------------------------------------
 Scope: this license covers only the source code written for this project.
 Game content read from or derived from メルクストーリア (Merc Storia) -- including
-images, audio, video, scripts, and the pre-built textures under output/assets/ --
+images, audio, video, scripts, and the textures generated under output/assets/ --
 is NOT covered by this license and remains the property of its respective
 rights holders.

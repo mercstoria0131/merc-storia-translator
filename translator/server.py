@@ -130,6 +130,19 @@ def install_frontend():
         f.write("window.ACTRESS_LAYOUT=" + json.dumps(build_player.ACTRESS_LAYOUT, ensure_ascii=False) + ";\n")
 
 
+def ensure_ui_assets():
+    """播放器介面圖片（訊息框、按鈕等）不隨專案附上：第一次啟動時從使用者的遊戲檔匯出到 output/assets/ui。
+    找不到遊戲時略過；設定好遊戲目錄後，第一次開啟故事時也會補上。"""
+    ui = os.path.join(OUTPUT, "assets", "ui")
+    if os.path.exists(os.path.join(ui, "bg_message_fs.png")):
+        return
+    try:
+        game().export_story_ui(ui)
+        print("已從遊戲檔匯出播放器介面圖片", flush=True)
+    except Exception as e:  # noqa: BLE001
+        print("暫時無法匯出播放器介面圖片（請到「設定」確認遊戲目錄）：%s" % e, flush=True)
+
+
 def ensure_story(sid):
     """播放器要讀 data/<id>.js 時：沒有或比譯文／名詞表舊就即時建立（只有劇本資料，素材不匯出）。回傳檔案路徑。"""
     path = os.path.join(OUTPUT, "data", "%d.js" % sid)
@@ -642,6 +655,7 @@ def main():
     ap.add_argument("--no-browser", action="store_true")
     a = ap.parse_args()
     install_frontend()
+    threading.Thread(target=ensure_ui_assets, daemon=True).start()
     srv = ThreadingHTTPServer(("127.0.0.1", a.port), Handler)
     url = "http://localhost:%d/" % a.port
     print("梅露可物語 故事翻譯器 已啟動：" + url, flush=True)

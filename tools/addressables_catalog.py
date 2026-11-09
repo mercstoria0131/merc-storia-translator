@@ -1,6 +1,6 @@
 """Unity Addressables 2.x 二進位 catalog (catalog_*.bin) 的最小解析器。
 
-格式（由逆向得到）：
+格式：
   header: magic 0x0DE38942, version, keysOffset, idOffset, instanceProviderOffset,
           sceneProviderOffset, initObjectsArrayOffset, buildResultHashOffset
   每個物件位移的前 4 bytes 為該物件的 byte 長度。

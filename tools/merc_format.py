@@ -1,15 +1,8 @@
-"""メルクストーリア - 癒術士と心の旋律 - (Steam/Android) 故事資料格式解碼器。
+"""メルクストーリア - 癒術士と心の旋律 - (Steam/Android) 故事劇本讀取。
 
-由 REA 分析 global-metadata.dat + GameAssembly.dll 得到的結論：
-  * StoryMasterData/*.bundle 內的 TextAsset (StoryYamlData_<id>) 以
-    CoreLibrary.Adapter.DataFile.DefaultEncryptor 加密：
-      AES-256-CBC / PKCS7，key = PBKDF2-HMAC-SHA256(
-          password = "2147483647" (int.MaxValue.ToString()),
-          salt     = "-2147483648" (int.MinValue.ToString()),
-          iterations = 1024, dkLen = 32)
-      IV = 密文前 16 bytes。
-  * 解密後是 MemoryPack 二進位序列化的 StoryYamlData：
-      StoryYamlData { int Id; Dictionary<int, StorySceneYamlData> table }
+StoryMasterData/*.bundle 內每一話的 TextAsset（StoryYamlData_<id>），
+讀出後為 MemoryPack 二進位格式：
+    StoryYamlData { int Id; Dictionary<int, StorySceneYamlData> table }
 """
 import hashlib
 import struct

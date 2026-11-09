@@ -264,7 +264,7 @@ class GameData:
 
     def export_unit_actress(self, unit_id, out_path):
         """Scout 類角色（可招募的夥伴）：故事裡用的是 Unit/LargeNoStage（無背景全身圖 800×900），
-        畫在 ScoutActress 的 700×788 身體框（ScoutActress..cctor 的 Vector2(700, 788)）。"""
+        畫在 700×788 的身體框裡。"""
         tex = self._first("Unit", "Assets/ExternalResources/Unit/LargeNoStage/%d.png" % unit_id, "Texture2D")
         if tex is None:
             return None
