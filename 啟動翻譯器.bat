@@ -2,13 +2,13 @@
 rem Merc Storia offline story translator - Windows launcher (double-click to run).
 rem Keep this file ASCII-only: cmd mangles multi-byte lines after goto/call.
 rem User-facing Chinese messages live in tools\launcher_messages.txt.
-rem Prefers conda (Miniconda/Miniforge): creates an env named merc-story; falls back to a Python venv.
+rem Prefers conda (Miniconda/Miniforge): creates an env named merc-storia; falls back to a Python venv.
 chcp 65001 >nul
 setlocal
 cd /d "%~dp0"
 set "MSGS=tools\launcher_messages.txt"
-set "ENVNAME=merc-story"
-set "VENV=%USERPROFILE%\.venvs\merc-story"
+set "ENVNAME=merc-storia"
+set "VENV=%USERPROFILE%\.venvs\merc-storia"
 set "PYVER=3.12"
 set "OK310=import sys; sys.exit(0 if sys.version_info>=(3,10) else 1)"
 rem On Windows on ARM we need x64 Python (emulated): FMOD, used to decode BGM/SE, has no ARM64 build.
@@ -142,7 +142,7 @@ for %%b in ("%USERPROFILE%\miniconda3" "%USERPROFILE%\miniforge3" "%USERPROFILE%
 )
 exit /b 0
 
-rem python.exe of the merc-story env (under <conda root>\envs\ or %USERPROFILE%\.conda\envs\).
+rem python.exe of the merc-storia env (under <conda root>\envs\ or %USERPROFILE%\.conda\envs\).
 :conda_env_python
 set "CPY="
 for %%p in ("%CONDA%") do for %%q in ("%%~dpp..") do set "CBASE=%%~fq"

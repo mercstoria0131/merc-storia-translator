@@ -262,7 +262,7 @@ class Translator:
                 continue
             if re.match(r"https?://", line):
                 try:
-                    req = urllib.request.Request(line, headers={"User-Agent": "merc-story-translator/1.0"})
+                    req = urllib.request.Request(line, headers={"User-Agent": "merc-storia-translator/1.0"})
                     html = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "replace")
                     txt = re.sub(r"<script.*?</script>|<style.*?</style>", " ", html, flags=re.S)
                     txt = re.sub(r"<[^>]+>", " ", txt)

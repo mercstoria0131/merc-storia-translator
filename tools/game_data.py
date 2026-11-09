@@ -1,7 +1,7 @@
 """遊戲資料存取層：讀取 Steam 版（或 Android 版解出的）AssetBundle，
 提供章節清單、劇本解碼、素材匯出（背景 / 立繪 / BGM / 音效 / UI）。
 
-依賴：UnityPy、pycryptodome、Pillow、soundfile（皆在 ~/.venvs/merc-story）。
+依賴：UnityPy、pycryptodome、Pillow、soundfile（皆在 ~/.venvs/merc-storia）。
 """
 import glob
 import io

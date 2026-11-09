@@ -11,7 +11,7 @@ __pycache__/
 data/
 output/
 
-# 使用手冊含遊戲畫面截圖，不放進公開版本
+# 使用手冊隨專案發佈 PDF 版；PowerPoint 原始檔不放進版本控制
 使用手冊.pptx
 
 # 個人設定（翻譯引擎網址、模型等；API 金鑰另存在 ~/.config）

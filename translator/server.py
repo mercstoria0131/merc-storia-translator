@@ -33,8 +33,18 @@ WEB = os.path.join(HERE, "web")
 OUTPUT = os.path.join(ROOT, "output")
 SETTINGS_PATH = os.path.join(ROOT, "work", "settings.json")
 SETTINGS_TEMPLATE = os.path.join(ROOT, "work", "settings.template.json")
-CRED_DIR = os.path.expanduser("~/.config/merc-story-translator")
+CRED_DIR = os.path.expanduser("~/.config/merc-storia-translator")
 CRED_PATH = os.path.join(CRED_DIR, "credentials.json")
+# 舊版存放金鑰的位置：新位置還沒有金鑰時複製過來（舊檔保留不動）
+_OLD_CRED_PATH = os.path.expanduser("~/.config/merc-story-translator/credentials.json")
+if not os.path.exists(CRED_PATH) and os.path.exists(_OLD_CRED_PATH):
+    try:
+        os.makedirs(CRED_DIR, exist_ok=True)
+        with open(_OLD_CRED_PATH, "rb") as _src, open(CRED_PATH, "wb") as _dst:
+            _dst.write(_src.read())
+        os.chmod(CRED_PATH, 0o600)
+    except OSError:
+        pass
 
 STATE = {"game": None, "chapters": None}
 JOBS = {}

@@ -636,7 +636,7 @@
   function addLog(s) {
     const t = sceneText(s);
     if (!t) return;
-    logItems.push({ n: speakerName(s), t: richText(t).map((c) => c.ch).join(""), j: lang !== "ja" && s.text_zh ? s.text : "" });
+    logItems.push({ n: speakerName(s), t: richText(t).map((c) => c.ch).join(""), j: lang !== "ja" && s.text_zh ? richText(s.text).map((c) => c.ch).join("") : "" });
   }
   function openLog() {
     const list = $("#log .list"); list.innerHTML = "";

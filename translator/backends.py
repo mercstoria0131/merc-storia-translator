@@ -56,7 +56,7 @@ class HttpBackend:
         self.retries = retries
 
     def _req(self, method, path, body=None, timeout=None):
-        headers = {"Content-Type": "application/json", "User-Agent": "merc-story-translator/1.0"}
+        headers = {"Content-Type": "application/json", "User-Agent": "merc-storia-translator/1.0"}
         if self.key:
             headers["Authorization"] = "Bearer " + self.key
         data = json.dumps(body).encode("utf-8") if body is not None else None

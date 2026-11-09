@@ -1,10 +1,10 @@
 #!/bin/zsh
 # 梅露可物語 離線版 故事翻譯器 啟動腳本（macOS：雙擊執行）
-# 建議用 conda（Miniconda／Miniforge）：自動建立名為 merc-story 的環境；沒有 conda 時改用 Python venv。
+# 建議用 conda（Miniconda／Miniforge）：自動建立名為 merc-storia 的環境；沒有 conda 時改用 Python venv。
 cd "$(dirname "$0")"
-ENVNAME="merc-story"
+ENVNAME="merc-storia"
 PYVER="3.12"
-VENV="$HOME/.venvs/merc-story"
+VENV="$HOME/.venvs/merc-storia"
 MARKNAME=".merc-installed"   # 套件安裝成功後才建立；上次安裝失敗時會重新安裝
 
 ok310() { [ -x "$1" ] && "$1" -c 'import sys; sys.exit(0 if sys.version_info>=(3,10) else 1)' 2>/dev/null; }

@@ -2,19 +2,21 @@
 
 《メルクストーリア - 癒術士と心の旋律 -》（Steam 離線版）的故事閱讀與翻譯工具：從你自己安裝的遊戲讀出故事劇本，翻成繁體中文（台灣），並以**與遊戲原版相同的介面**播放（背景、立繪表情、BGM、音效、影片、Timeline 演出）。
 
+第一次使用請先看圖文版的 **[使用手冊.pdf](使用手冊.pdf)**。
+
 本專案已附上全部 3,958 話的中文譯文（`work/zh/`）與名詞對照表（`work/glossary.json`），裝好就能直接看中文故事；也可以用自己的翻譯引擎重新翻譯或修改譯文。
 
 ## 需要準備
 
 - **Steam 版遊戲**已安裝在這台電腦（或可存取的磁碟上）。本工具只讀取遊戲檔，不修改。
-- **建議安裝 conda**（[Miniconda](https://www.anaconda.com/download/success) 或 [Miniforge](https://github.com/conda-forge/miniforge)）。第一次啟動時，啟動器會自動建立名為 `merc-story` 的 conda 環境（Python 3.12，套件來源 conda-forge），再安裝需要的套件（UnityPy、Pillow、soundfile 等，約需幾分鐘與網路連線）。
-  - 沒有 conda 時，改用已安裝的 Python 3.10 以上，在 `~/.venvs/merc-story` 建立 venv。
+- **建議安裝 conda**（[Miniconda](https://www.anaconda.com/download/success) 或 [Miniforge](https://github.com/conda-forge/miniforge)）。第一次啟動時，啟動器會自動建立名為 `merc-storia` 的 conda 環境（Python 3.12，套件來源 conda-forge），再安裝需要的套件（UnityPy、Pillow、soundfile 等，約需幾分鐘與網路連線）。
+  - 沒有 conda 時，改用已安裝的 Python 3.10 以上，在 `~/.venvs/merc-storia` 建立 venv。
   - 安裝中途失敗時，再次啟動會自動重新安裝。
   - **Windows on ARM**（例如 Apple Silicon Mac 上的 Parallels）：解碼 BGM 與音效用的 FMOD 沒有 ARM64 版，因此啟動器會把 conda 環境建成 **x64 版**（由系統模擬執行），conda 本身是 ARM64 版也沒關係。沒有 conda 時，請安裝 python.org 的「Windows installer (64-bit)」版 Python；只有 ARM64 版 Python 時，仍可翻譯與看圖，但沒有聲音。
 - 想自己手動建立環境也可以（Windows on ARM 要先指定 x64：命令提示字元執行 `set CONDA_SUBDIR=win-64`，PowerShell 執行 `$env:CONDA_SUBDIR="win-64"`）：
   ```
-  conda create -n merc-story -c conda-forge python=3.12 pip
-  conda activate merc-story
+  conda create -n merc-storia -c conda-forge python=3.12 pip
+  conda activate merc-storia
   pip install -r requirements.txt
   python translator/server.py
   ```
@@ -64,7 +66,7 @@
 - Ollama「思考模式」預設**關閉**：實測 qwen3.8:27b 一批 30 句，關閉約 7 秒、開啟約 18 秒，譯文品質相近。
 - 自架模型偶爾混入簡體字（如「什么」），會自動轉成繁體（只轉換純簡體字，「面」「里」等繁簡共用字不動）；原文整句有「」『』而譯文漏掉外層括號時會自動補回，句首句尾括號不一致則列為警告。
 
-- 自架服務不計 API 費用，進度與估價改顯示 token 數。所有金鑰都只存在 `~/.config/merc-story-translator/credentials.json`（權限 600），不會寫進專案資料夾或輸出檔。
+- 自架服務不計 API 費用，進度與估價改顯示 token 數。所有金鑰都只存在 `~/.config/merc-storia-translator/credentials.json`（權限 600），不會寫進專案資料夾或輸出檔。
 - 每話譯文會記錄使用的引擎與模型（例如 `ollama:qwen3:32b`），可在「譯文校對」分頁看到；名詞表條目的「來源」也會標出是哪個模型建議的。
 
 ## 翻譯流程
@@ -104,7 +106,7 @@ work/zh/<storyId>.json 中文譯文（隨專案附上）    work/glossary.json �
 work/chapters_zh.json  活動故事等章節名稱的中文（翻譯時自動補上未翻譯的章節，也可手動修改；沒有譯名的章節顯示日文）
 work/settings.template.json  設定樣板：第一次啟動時複製成 work/settings.json（含預設的追加翻譯規則：
                        梅露可的口癖「みゅ」→「呀」、圖圖的叫聲「きゅ」等→「啾」）
-work/settings.json     你的設定（不納入版本控制；API 金鑰另存在 ~/.config/merc-story-translator/）
+work/settings.json     你的設定（不納入版本控制；API 金鑰另存在 ~/.config/merc-storia-translator/）
 data/                  從遊戲檔建立的日文劇本與章節資料（第一次用到時產生，不納入版本控制）
 output/                播放器：index.html、player.html、player/；assets/ui|timeline|ss 與 data/（劇本資料）
                        都在使用時從遊戲檔產生（不納入版本控制）
