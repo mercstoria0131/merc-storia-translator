@@ -164,4 +164,7 @@ button { font: inherit; padding: 0; border: 0; background: none; cursor: pointer
 #tlskip { position: absolute; right: 18px; top: 16px; display: none; padding: 6px 16px; border-radius: 18px; border: 2px solid rgba(255,243,214,.75); background: rgba(54,34,20,.55); color: #fff3d6; font: inherit; font-size: 17px; letter-spacing: 1px; cursor: pointer; opacity: .55; transition: opacity .2s; }
 #tlskip:hover { opacity: 1; }
 #tlskip.on { display: block; }
-
+#tlnotice { position: absolute; left: 50%; top: 40px; transform: translateX(-50%); max-width: 900px; padding: 14px 22px; border-radius: 10px;
+  background: rgba(40,30,24,.88); color: #fff; font-size: 20px; line-height: 1.55; white-space: pre-line; z-index: 50; pointer-events: none;
+  opacity: 0; transition: opacity .4s; }
+#tlnotice.on { opacity: 1; }

@@ -507,9 +507,20 @@
       return true;
     } catch (e) {
       console.warn("Timeline 無法播放：", info.name, e);
+      tlNotice(e);
       curTL = null; curTLInfo = null;
       return false;
     }
+  }
+  // Timeline 需要 WebGL2；無法使用時在畫面上說明原因（否則演出會被直接略過，看起來像沒有畫面）
+  function tlNotice(e) {
+    let el = $("#tlnotice");
+    if (!el) { el = document.createElement("div"); el.id = "tlnotice"; $("#stage").appendChild(el); }
+    const why = (e && e.message) || String(e);
+    el.textContent = "這段 Timeline 演出無法播放，已略過。\n原因：" + why +
+      "\n演出需要瀏覽器的 WebGL2：請確認已開啟瀏覽器的硬體（圖形）加速，或改用其他瀏覽器。";
+    el.classList.add("on");
+    clearTimeout(tlNotice.t); tlNotice.t = setTimeout(() => el.classList.remove("on"), 12000);
   }
   function stopTimeline(keepFrame) {
     if (curTL) { curTL.stop(); curTL = null; }
