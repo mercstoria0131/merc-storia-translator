@@ -125,6 +125,7 @@ STORY_LOCK = threading.Lock()
 def install_frontend():
     """把播放器前端（tools/player_src）與立繪格位表放進 output/；不需要遊戲檔。"""
     src = os.path.join(ROOT, "tools", "player_src")
+    os.makedirs(os.path.join(OUTPUT, "data"), exist_ok=True)   # 剛 clone 下來時 output/ 還不存在
     for name in os.listdir(src):
         if name.startswith("._"):
             continue
