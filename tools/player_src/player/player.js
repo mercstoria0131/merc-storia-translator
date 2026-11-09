@@ -336,7 +336,7 @@
   function showText(s) {
     const box = $("#text");
     box.className = s.size === "Middle" ? "middle" : s.size === "Big" ? "big" : "";
-    // 沒有台詞的場景（例如只看背景或影片前的空白「」）：收起訊息框與 BACK／NEXT，只留右下的「下一步」箭頭
+    // 沒有台詞的場景（例如只看背景或影片前的空白「」）：收起訊息框、BACK／NEXT 與右下的「下一步」箭頭
     const empty = !sceneText(s);
     $("#window").className = (s.win === "Shout" ? "shout" : "default") + (empty ? " empty" : "");
     const chars = richText(sceneText(s));
