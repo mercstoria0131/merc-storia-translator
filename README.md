@@ -88,7 +88,7 @@
 啟動翻譯器.command / .bat  啟動器（macOS / Windows）
 translator/            翻譯器：server.py（本機網頁伺服器）、media.py（素材即時解碼與記憶體快取）、
                        pipeline.py（翻譯流程）、backends.py（Claude／Ollama／vLLM）、web/（介面）
-tools/                 遊戲資料解析：merc_format.py（解密＋MemoryPack）、addressables_catalog.py、game_data.py、
+tools/                 遊戲資料讀取：merc_format.py、addressables_catalog.py、game_data.py、
                        build_player.py（產生播放器劇本資料）、timeline.py、spritestudio.py、player_src/（播放器前端）
 work/zh/<storyId>.json 中文譯文（隨專案附上）    work/glossary.json 名詞對照表（隨專案附上）
 work/chapters_zh.json  活動故事等章節名稱的中文（翻譯時自動補上未翻譯的章節，也可手動修改；沒有譯名的章節顯示日文）
@@ -100,27 +100,30 @@ output/                播放器：index.html、player.html、player/；assets/t
                        data/ 為第一次開啟時產生的劇本資料
 ```
 
-## 技術說明（遊戲資料格式）
-
-以 REA 的 `inspect_il2cpp_metadata`（global-metadata.dat v39，連結 GameAssembly.dll 取得方法位址）找出故事系統的類別，再對關鍵函式反組譯：
-
-- **劇本**：`StoryMasterData/*.bundle` 內的 TextAsset `StoryYamlData_<id>`，由 `CoreLibrary.Adapter.DataFile.DefaultEncryptor` 加密：
-  AES-256-CBC／PKCS7，金鑰 = PBKDF2-HMAC-SHA256(密碼 `"2147483647"`（int.MaxValue）, 鹽 `"-2147483648"`（int.MinValue）, 1024 次, 32 bytes)，IV 為密文前 16 bytes。
-- 解密後是 **MemoryPack** 序列化的 `StoryYamlData { int Id; Dictionary<int, StorySceneYamlData> }`；每個場景 21 個欄位：說話者、台詞、訊息框類型（Default/Shout）、字級（Default/Middle/Big）、背景＋時段、背景特效、BGM、音效、畫面效果（Fade/Shake/Earthquake/Still/Wipe/CrossFade/Heal/Summon/Scroll/Movie…）、左中右三個角色（立繪 ID、臉 ID、表情、感情圖示、出場動畫、是否發言中）、SpriteStudio 特效。欄位順序與型別取自 metadata 中各類別的 backing field。
-- **名字牌**（`StorySceneData.SetSpeakers` 反組譯）：場景的 `speakers` 是角色的 key，依序比對左、中、右角色，key 相同就顯示該角色的 `displayName`（例如 key「過去メルク」顯示為「カラコリチア」，`<name>` 換成主角名），多人以「・」連接；畫面上沒有對應角色的說話者不顯示名字。同一個 key 在不同場景可能顯示不同名字，所以逐場景判斷。名詞表、翻譯時的說話者資訊與播放器都用 displayName。
-- **分段劇本**：`StoryMasterData` 的 `children` 欄位列出同一話的後續段落（例如 2111 →「2111_3」、4347 →「4347_1」「4347_3」「4347_4」），原版在本體播完後依序接著播；缺號的段落是戰鬥，沒有劇本。共 5 話有分段（2111、3288、3624、4283、4347），解出時會把段落接成一份劇本。已翻譯過的話若因此多出句子，翻譯時只會翻新增的部分，原有譯文保留。
-- **章節**：`MasterData/ChapterMasterData`、`StoryMasterData`（同樣加密＋MemoryPack）。第二部 = 26 章 427 話。
-- **素材定位**：Addressables 2.x 二進位 catalog（`catalog_*.bin`）；自行實作解析器（字串為 `{stringId,nextId}` 反向鏈結串列）。背景 `Story/StoryBackground/<id>_<時段>.png`、立繪 `Story/StoryActress/<id>.png`、音訊 `Sound/B-*.mp3`／`S-*.mp3`（FMOD Vorbis → 轉 MP3）、影片 `Common/Movie/*.mp4`（VideoClip，`m_ExternalResources` 指向 `.resource` 內的原始 MP4）。
-- **立繪圖集**（`CharacterActressConstant`／`DefaultActress`／`NaviActress` 的 .cctor 反組譯）：1024×1024 圖集，Default 身體 (2,2,700,788)、臉 150×150、格距 153，表情依 喜/喜d/怒/怒d/哀/哀d/驚/驚d/呆/照/眠/真剣 兩欄排列、固有1～4 在底列；Navi（梅露可、托托等）身體 (2,2,400,500)、臉 200×200、格距 203。臉的貼合位置來自 `ActressPositionYamlData`。非發言角色亮度 50%（`CharacterActressView.InactiveColor` = 128/255）。**Scout**（可招募的夥伴角色，多見於メモリアルストーリー等）不用 StoryActress 圖集，而是 `Unit/LargeNoStage/<unitId>.png`（無背景全身圖 800×900），整張畫在 700×788 的身體框（`ScoutActress..cctor` 的 `Vector2(700, 788)`），匯出為 `assets/chara/u<unitId>.webp`。
-- **Timeline 演出**：場景的 `assetParams` 有 `assetType == "Timeline"` 時，遊戲生成 `BundleAssets/Particle/StoryTimeline_<名稱>/StoryTimeline_<名稱>.prefab`，由 PlayableDirector（`StoryTimelineComponent`）播放，不是影片檔。目前有 6 個：`main2_sizuku`（4347）、`main2_sizuku_kaerimichi`＋`main2_Endroll` 片尾名單（4348）、`main2_EndrollStory`（4349）、`main2_sora`（4301）、`decemberspecial_2`（4283）。bundle 有 typetree，可直接讀出物件階層、SpriteRenderer、MeshRenderer＋材質、粒子、Animator、Timeline 軌道（動畫／啟用／群組），以及遊戲自訂的標記：`[UI] テキストフェードイン／アウト`（畫面下方的台詞，要翻譯）、`[UI] イベント指定`（`TimelineUIEvent`：1＝WaitText、2＝WaitTap 等點擊、3＝NextScene 進下一場景）、`[Bgm] イベント指定`（`TimelineBgmEvent`：1＝FadeIn、2＝FadeOut）、`SE Marker`；`TimelineAnimationClipTrack` 是 Animancer 播放的片段。AnimationClip 是 muscle clip：streamed 曲線每個 key 存 (曲線索引, a, b, c, d)，區段值 =((a·dt+b)·dt+c)·dt+d；綁定路徑與屬性是 CRC32，材質屬性（customType 22）為 `(CRC32(名稱) & 0x0FFFFFFF) | (分量 << 28)`。座標為正交攝影機、可見 568×320 單位、z 小者在前。`[UI] Animator操作`（`TimelineAnimatorEvent`：1＝SetTrigger、2＝隨機）透過 `TimelineAnimatorReceiver.animator` 操作 Animator 狀態機（Trigger、Exit Time、Any State）。部分演出用 RenderTexture 攝影機分鏡：攝影機只拍 culling mask 內的圖層（17～20），畫面貼在 `renderTextureMeshRenderer` 的平面上，以材質 `_Alpha` 交叉淡化（sora 還會再經過一台 bloom 攝影機）。WaitText 時演出停在畫面上，故事接著用訊息框顯示台詞，下一個 `waitTarget` 場景再接著播（4283 的 `decemberspecial_2` 跨 15 個場景、分兩段 Timeline）。有些台詞是畫成圖片的（`txt_001`…），原文抄錄在 `tools/timeline_image_texts.json`，翻譯後由播放器以 Canvas 畫成同樣風格的貼圖取代（雙語模式下，原本的日文圖片縮小接在中文下方）。`tools/timeline.py` 匯出成 `assets/timeline/<名稱>/tl.js`（圖片以 data URI 內嵌，直接用 file:// 開啟也能用 WebGL），`player/timeline.js` 用 WebGL 重現；台詞在翻譯時以索引 10000×(場景+1)+序號 接在該場景之後。
-- **SpriteStudio 文字特效**：`assetType == "EffectSpriteStudio"` 的特效由 SS6 for Unity 播放：`SpriteStudio/Effect/<名稱>/` 的 `DataAnimation`（da_）與 `DataCellMap`（dc_）是有 typetree 的 MonoBehaviour。屬性以 PackAttribute StandardCPE 儲存：只記數值改變的格，`TableCode` 低 15 位元是格數、高位元是 `TableValue` 索引；`Status.Flags` 0x20000000＝隱藏，`StatusParts` 0x10000000＝此動畫沒用到、0x08000000＝不受遮罩影響。遮罩零件（Feature 6／7）的不透明度是門檻：遮罩貼圖 alpha 大於門檻的地方會遮住受遮罩影響的零件（不透明度 0＝整塊遮住，用來做文字由左到右逐行出現；漸層遮罩配合不透明度變化做出擦入效果）。每個 CellMap 在 `TableMaterial` 佔 20 個材質，第一個材質的 `_MainTex` 就是它的貼圖；零件的 `OperationBlendTarget` 1＝加算；`PartsColor`（零件顏色，混合／加算／減算／乘算）與 `ScalingLocal` 也會重現；網格零件（Feature 13，骨架彎曲）以未變形的四邊形近似，頂點變形不重現。目前重現的文字特效（活動故事裡把台詞畫在圖上的全部）：`Storyparts_lspr`（2847、2856）、`Storyparts_fairy_1`（1934、1938、1942 的書信）、`Storyparts_snowtext`（1461、1475）、`Storyparts_vote1_oukoku_1`（3061～3075 的活動標題、副標、一回戦、続）、`Storyparts_decemberspecial_3`（4285）、`Storyparts_wa_3_1` 的動畫 2（2138 的毛筆字「払暁蜘蛛」）。原文抄錄在 `tools/spritestudio_texts.json`（只有列在這裡的特效會被重現，其他仍用 CSS 近似；`_anims` 可以只重現特定動畫）。`Storyparts_syousu_4_2` 的 effect_moji 是虛構的符文，不是日文，保留原圖。另外以原圖重現（沒有文字）的特效：`Storyparts_general_1`（黑／白集中線，約 400 話）、`Storyparts_pappakapan_ss`（「ぱっぱかぱん」放射光，57 話）。畫面效果 `Heal`（癒術）依原版 `StoryHealEffectView` 重現：全畫面 80% 黑底，畫面中央以 0.5 倍播放 `effect_iyashi` 的動畫「1」，速度 0.7 倍。特效的前後順序依 `assetParams.position.z`：大於 0 畫在背景與角色之間（例如放射光在角色後面），其餘畫在角色前面（集中線）。`spritestudio_texts.json` 或 `timeline_image_texts.json` 修改後，劇本快取與播放資料會在下次開啟時自動重建。`tools/spritestudio.py` 把動畫烘焙成逐格繪製清單，輸出 `assets/ss/<名稱>/ss.js`＋`tex0.png`…，`player/spritestudio.js` 用 Canvas 播放；中文模式下用譯文重畫文字（每一行對齊原圖該行的位置並縮在原本的寬高內，遮罩出現的時機不變，雙語模式也顯示譯文），顯示的台詞會記到對話紀錄。台詞翻譯索引接在 Timeline 台詞之後（10000×(場景+1)+序號），譯文的行數要和原圖一致。
-- **介面版面**：`StoryRenderTextureWorkspace.prefab` 的 RectTransform（1136×640）：訊息框 1136×218 貼底、文字區 700×140（字級 24、顏色 #46382F）、NEXT/BACK 在 ±430、名字牌 300×40、右上 MENU 72×72 與子按鈕；UI 圖片取自 `StoryUI.spriteatlasv2`。
-
 ## 已知限制
 
 - Scout 角色的表情：全部資料中 47,031 次出場只有 4 次不是「通常」，目前一律顯示全身圖本來的表情。
 - SpriteStudio 動畫特效（霧、雨、雪、火焰等約 5% 場景）以 CSS 近似（`spritestudio_texts.json` 列出的文字特效除外）；角色感情圖示以符號近似。
 - Timeline 演出是重現而非錄影：自訂著色器以近似處理（ArtisticFade 溶解、Overlay、飽和度、RenderTexture 分鏡的透明度有做；放射模糊、色差、高斯模糊等後製效果略過），粒子為簡化模擬。播放中點畫面只會在出現「下一頁」圖示時繼續；略過演出用右上角的 SKIP。
 - 字型使用 Google Fonts（粉圓 Huninn／RocknRoll One）；離線時改用系統字型。
-- Android XAPK 只含程式與內嵌 UI，故事 bundle 是遊戲執行時下載的，因此以 Steam 版資料為準。
 - 劇本的 `Movie` 效果（第 2260、2556、3624、4344、4347 話）播放時才從遊戲檔解開影片：解開期間會暫時多用約 2 GB 記憶體（在子程序裡，結束後歸還），伺服器只保留目前這一部（最大 402 MB）。
+
+## 免責聲明
+
+- **非官方作品**：本專案為愛好者自製，與 Happy Elements 株式会社及《メルクストーリア》的權利人沒有任何關係，未經其授權或認可。遊戲名稱、角色、劇情、圖像、音樂等的著作權與商標，皆屬原權利人所有。
+- **不提供任何保證**：作者不保證本程式的功能、正確性、穩定性或適用於任何特定用途。使用本程式所造成的任何直接或間接損失（包括資料遺失、裝置或遊戲相關問題），作者概不負責，使用者須自行承擔風險。
+- **僅供學習與個人使用，不得營利**：本程式為學習目的而開發。請勿將本程式或其產出用於任何營利行為，包括販售、收費散布、付費服務、商業展示或廣告收益。
+- **須擁有正版遊戲**：本程式不附帶遊戲本體，只讀取使用者自己合法取得並安裝的 Steam 版遊戲檔。請勿用於未取得合法授權的遊戲資料。
+- **遊戲素材請勿散布**：播放時從遊戲檔讀出的圖片、音樂、影片、劇本等，只供使用者在自己的電腦上觀看。請勿將其擷取、匯出後上傳或散布給他人。
+- **譯文僅供參考**：附帶的中文譯文為非官方的愛好者翻譯（部分由 AI 翻譯產生），可能含有錯誤，不代表官方內容；原作劇情的著作權仍屬原權利人。
+- **第三方翻譯服務**：使用 Claude 等翻譯服務時，劇本文字會傳送到該服務，產生的費用由使用者自行負擔。請自行確認該服務的使用條款與隱私政策。API 金鑰只儲存在使用者自己的電腦上。
+- **遵守相關條款**：使用時請遵守遊戲與 Steam 的使用條款及當地法律。若權利人認為本專案侵害其權利，請與作者聯繫，作者將配合處理（包括下架）。
+
+## 授權條款
+
+本專案的程式碼採用 [MIT 授權條款](LICENSE)。
+
+MIT 授權只適用於本專案作者撰寫的程式碼。從遊戲衍生的內容不在 MIT 授權範圍內，其權利仍屬原權利人，例如：
+- `output/assets/` 內附的演出與介面圖片；
+- 劇本原文；
+- 譯文中引用的原作內容。

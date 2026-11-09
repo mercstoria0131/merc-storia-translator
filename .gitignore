@@ -17,3 +17,4 @@ output/assets/*
 # 個人設定（翻譯引擎網址、模型等；API 金鑰另存在 ~/.config）
 work/settings.json
 work/*.before*.json
+~$*
