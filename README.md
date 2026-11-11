@@ -11,6 +11,7 @@
 - **Steam 版遊戲**已安裝在這台電腦（或可存取的磁碟上）。本工具只讀取遊戲檔，不修改。
 - **建議安裝 conda**（[Miniconda](https://www.anaconda.com/download/success) 或 [Miniforge](https://github.com/conda-forge/miniforge)）。第一次啟動時，啟動器會自動建立名為 `merc-storia` 的 conda 環境（Python 3.12，套件來源 conda-forge），再安裝需要的套件（UnityPy、Pillow、soundfile 等，約需幾分鐘與網路連線）。
   - 沒有 conda 時，改用已安裝的 Python 3.10 以上，在 `~/.venvs/merc-storia` 建立 venv。
+  - Windows 上**不必**從「Anaconda Prompt」啟動，也不必把 conda 加入 PATH：直接雙擊 `啟動翻譯器.bat`，啟動器會自己到 Miniconda／Anaconda／Miniforge 的安裝位置（使用者資料夾、AppData、ProgramData、C:\ 底下，以及安裝時寫入登錄檔的位置）找 conda。萬一仍顯示找不到，可以改從「Anaconda Prompt」進入本資料夾後執行 `啟動翻譯器.bat`。
   - 安裝中途失敗時，再次啟動會自動重新安裝。
   - **Windows on ARM**（例如 Apple Silicon Mac 上的 Parallels）：解碼 BGM 與音效用的 FMOD 沒有 ARM64 版，因此啟動器會把 conda 環境建成 **x64 版**（由系統模擬執行），conda 本身是 ARM64 版也沒關係。沒有 conda 時，請安裝 python.org 的「Windows installer (64-bit)」版 Python；只有 ARM64 版 Python 時，仍可翻譯與看圖，但沒有聲音。
 - 想自己手動建立環境也可以（Windows on ARM 要先指定 x64：命令提示字元執行 `set CONDA_SUBDIR=win-64`，PowerShell 執行 `$env:CONDA_SUBDIR="win-64"`）：
@@ -26,6 +27,14 @@
 
 1. 啟動：macOS 雙擊 **`啟動翻譯器.command`**；Windows 雙擊 **`啟動翻譯器.bat`**。瀏覽器會開啟 <http://localhost:8765>。
 2. 程式會自動尋找 Steam 的遊戲資料夾。找不到時，到「設定」分頁填入遊戲安裝目錄（例如 `C:\Program Files (x86)\Steam\steamapps\common\メルクストーリア - 癒術士と心の旋律 -`）後按「儲存設定」。
+   遊戲在開啟後下載的資料，新舊版放的位置不同，程式兩個位置都會自動尋找，不必另外設定：
+
+   | 遊戲版本 | 下載資料的位置 |
+   |---|---|
+   | 舊版 | 遊戲安裝目錄底下的 `jp_co_happyelements\メルストM\AssetBundle` |
+   | 新版 | `C:\Users\<使用者名稱>\AppData\LocalLow\jp_co_happyelements\メルストM\AssetBundle` |
+
+   兩個位置都有資料時，使用最近更新的那一份。若出現「找不到遊戲下載的資料」，請先開啟遊戲、等資料下載完成後再啟動翻譯器。
 3. 按右上「開啟播放器」，或直接瀏覽 <http://localhost:8765/output/index.html>，選章節與話數就能播放。
 
 使用期間請保持啟動視窗開著；關掉視窗就會停止伺服器。

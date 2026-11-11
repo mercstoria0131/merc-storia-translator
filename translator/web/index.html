@@ -93,7 +93,7 @@
         </fieldset>
         <p class="muted">所有金鑰只存在本機 ~/.config/merc-storia-translator/credentials.json（權限 600），不會寫進 SD 卡或輸出檔。</p>
         <label>同時翻譯的話數 <input type="number" id="sWorkers" min="1" max="8"></label>
-        <label>遊戲資料夾（Steam 版安裝目錄） <input type="text" id="sGame"></label>
+        <label>遊戲資料夾（Steam 版安裝目錄；新版遊戲下載的資料在 AppData\LocalLow，會自動尋找） <input type="text" id="sGame"></label>
         <label>參考資料（每行一個網址或一段文字；用於建立名詞表，例如角色維基頁面）<textarea id="sRefs" rows="5" placeholder="https://wikiwiki.jp/mehterhanedb/…"></textarea></label>
         <label>追加翻譯規則（例如角色口癖的固定譯法）<textarea id="sRules" rows="5" placeholder="例：梅露可句尾的「～なのですよ」一律譯為「～的說喔」"></textarea></label>
         <button class="btn primary" type="submit">儲存設定</button>

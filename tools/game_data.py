@@ -21,6 +21,8 @@ ROOT = os.path.dirname(HERE)
 GAME_FOLDER = "メルクストーリア - 癒術士と心の旋律 -"
 BUNDLE_ROOT = "jp_co_happyelements/メルストM/AssetBundle"      # 底下是 <Unity 版本>/StandaloneWindows64
 EMBED_SUB = "メルストM_Data/StreamingAssets/aa"
+# 遊戲下載的資料：舊版放在遊戲安裝目錄底下，新版放在 %USERPROFILE%\AppData\LocalLow 底下（同樣是 BUNDLE_ROOT 的結構）
+LOCALLOW = os.path.join(os.path.expanduser("~"), "AppData", "LocalLow")
 
 
 def _steam_libraries():
@@ -43,22 +45,40 @@ def _steam_libraries():
     return libs
 
 
+def _bundle_roots(game_dir):
+    """可能放遊戲下載資料（AssetBundle）的位置，新舊版路徑都列入。"""
+    roots = []
+    if game_dir:
+        roots += [os.path.join(game_dir, BUNDLE_ROOT),                 # 舊版：遊戲安裝目錄底下
+                  os.path.join(game_dir, "AssetBundle"),               # 設定直接指到 LocalLow\jp_co_happyelements\メルストM
+                  os.path.join(game_dir, "メルストM", "AssetBundle")]   # 設定指到 LocalLow\jp_co_happyelements
+    roots.append(os.path.join(LOCALLOW, BUNDLE_ROOT))                    # 新版：%USERPROFILE%\AppData\LocalLow
+    roots += glob.glob(os.path.join(LOCALLOW, "*", "メルストM", "AssetBundle"))
+    return roots
+
+
+def bundle_dir(game_dir):
+    """AssetBundle 目錄；Unity 版本號會隨遊戲更新改變。新舊版位置都有資料時，取最近更新的一份。"""
+    cands = []
+    for root in _bundle_roots(game_dir):
+        for d in glob.glob(os.path.join(root, "*", "StandaloneWindows64")):
+            if d not in cands and glob.glob(os.path.join(d, "*", "catalog_*.bin")):
+                cands.append(d)
+    if not cands:
+        return ""
+    return max(cands, key=lambda d: max(os.path.getmtime(c) for c in glob.glob(os.path.join(d, "*", "catalog_*.bin"))))
+
+
 def find_game_dir():
-    """自動尋找遊戲安裝位置；找不到時回傳空字串（請在「設定」分頁手動指定）。"""
+    """自動尋找遊戲安裝位置（且找得到遊戲下載的資料）；找不到時回傳空字串（請在「設定」分頁手動指定）。"""
     for lib in _steam_libraries():
         d = os.path.join(lib, "steamapps", "common", GAME_FOLDER)
-        if os.path.isdir(os.path.join(d, BUNDLE_ROOT)):
+        if (os.path.isdir(os.path.join(d, EMBED_SUB)) or os.path.isdir(os.path.join(d, BUNDLE_ROOT))) and bundle_dir(d):
             return d
     return ""
 
 
 DEFAULT_GAME_DIR = find_game_dir()
-
-
-def bundle_dir(game_dir):
-    """AssetBundle 目錄；Unity 版本號會隨遊戲更新改變，取現有的最新一個。"""
-    cands = sorted(glob.glob(os.path.join(game_dir, BUNDLE_ROOT, "*", "StandaloneWindows64")))
-    return cands[-1] if cands else os.path.join(game_dir, BUNDLE_ROOT, "StandaloneWindows64")
 
 # 立繪圖集中各表情的格位（1024x1024 圖集；身體 0,0,700,788；臉 150x150）
 FACE_SLOTS = {}
@@ -75,9 +95,13 @@ class GameData:
         if not self.game_dir:
             raise FileNotFoundError("找不到遊戲安裝位置，請在「設定」分頁指定 Steam 版遊戲資料夾。")
         self.bdir = bundle_dir(self.game_dir)
-        self.edir = os.path.join(self.game_dir, EMBED_SUB)
-        if not os.path.isdir(self.bdir):
-            raise FileNotFoundError("找不到遊戲 AssetBundle 目錄：" + self.bdir)
+        if not self.bdir:
+            raise FileNotFoundError("找不到遊戲下載的資料（AssetBundle）。舊版遊戲放在安裝目錄底下的 " + BUNDLE_ROOT
+                                    + "，新版放在 " + os.path.join(LOCALLOW, BUNDLE_ROOT)
+                                    + "；請先開啟遊戲並下載完資料。")
+        # 遊戲內建資料在安裝目錄；設定若指到 LocalLow，就改用自動找到的安裝目錄
+        inst = self.game_dir if os.path.isdir(os.path.join(self.game_dir, EMBED_SUB)) else (find_game_dir() or self.game_dir)
+        self.edir = os.path.join(inst, EMBED_SUB)
         self._cat = {}
         self._lock = threading.Lock()
         self._master = None

@@ -43,12 +43,14 @@ goto venv_setup
 
 :conda_setup
 call :msg CONDA_SETUP
+call :msg CONDA_FOUND
+echo(  %CONDA%
 call :conda_env_python
 if defined CPY call :usable "%CPY%" || set "CPY="
 if defined CPY goto conda_deps
-if exist "%CPYDIR%" "%CONDA%" env remove -y -q -n %ENVNAME% >nul 2>&1
+if exist "%CPYDIR%" call "%CONDA%" env remove -y -q -n %ENVNAME% >nul 2>&1
 if defined ARM set "CONDA_SUBDIR=win-64"
-"%CONDA%" create -y -q -n %ENVNAME% --override-channels -c conda-forge python=%PYVER% pip
+call "%CONDA%" create -y -q -n %ENVNAME% --override-channels -c conda-forge python=%PYVER% pip
 if errorlevel 1 goto fail
 set "CONDA_SUBDIR="
 call :conda_env_python
@@ -68,6 +70,7 @@ if not defined PY call :find_any
 if defined PY goto venv_create
 call :msg NO_PY1
 call :msg NO_PY2
+call :msg NO_PY3
 pause
 exit /b 1
 :venv_create
@@ -133,13 +136,26 @@ exit /b %errorlevel%
 "%~1" -c "%OKX64%" >nul 2>&1
 exit /b %errorlevel%
 
-rem Find conda: an activated conda (CONDA_EXE) or common install locations.
+rem Find conda without needing Anaconda Prompt: an activated conda (CONDA_EXE), conda on PATH,
+rem the install location Miniconda/Anaconda records in the registry, then common install folders.
 :find_conda
 set "CONDA="
 if defined CONDA_EXE if exist "%CONDA_EXE%" set "CONDA=%CONDA_EXE%"
-for %%b in ("%USERPROFILE%\miniconda3" "%USERPROFILE%\miniforge3" "%USERPROFILE%\anaconda3" "%LOCALAPPDATA%\miniconda3" "%ProgramData%\miniconda3" "%ProgramData%\miniforge3" "%ProgramData%\anaconda3") do (
-  if not defined CONDA if exist "%%~b\Scripts\conda.exe" set "CONDA=%%~b\Scripts\conda.exe"
+for %%c in (conda.exe conda.bat) do (
+  if not defined CONDA if not "%%~$PATH:c"=="" set "CONDA=%%~$PATH:c"
 )
+for %%k in (HKCU HKLM) do (
+  for /f "tokens=2,*" %%a in ('reg query "%%k\Software\Python\ContinuumAnalytics" /s /ve 2^>nul ^| findstr /c:"REG_SZ"') do call :conda_root "%%b"
+)
+for /d %%d in ("%USERPROFILE%\*conda*" "%USERPROFILE%\*forge*" "%LOCALAPPDATA%\*conda*" "%LOCALAPPDATA%\*forge*" "%ProgramData%\*conda*" "%ProgramData%\*forge*" "%SystemDrive%\*conda*" "%SystemDrive%\*forge*") do call :conda_root "%%~d"
+exit /b 0
+
+rem Use <folder> as the conda install if it is one (Scripts\conda.exe, or condabin\conda.bat in newer installs).
+:conda_root
+if defined CONDA exit /b 0
+if exist "%~1\Scripts\conda.exe" set "CONDA=%~1\Scripts\conda.exe"
+if defined CONDA exit /b 0
+if exist "%~1\condabin\conda.bat" set "CONDA=%~1\condabin\conda.bat"
 exit /b 0
 
 rem python.exe of the merc-storia env (under <conda root>\envs\ or %USERPROFILE%\.conda\envs\).
